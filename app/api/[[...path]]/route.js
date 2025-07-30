@@ -230,6 +230,11 @@ async function handleRoute(request, { params }) {
     if ((route === '/' || route === '' || path.length === 0) && method === 'GET') {
       return handleCORS(NextResponse.json({ message: "Food Mart API is running!" }))
     }
+    
+    // Health check endpoint
+    if (route === '/health' && method === 'GET') {
+      return handleCORS(NextResponse.json({ status: "healthy", timestamp: new Date().toISOString() }))
+    }
 
     // Authentication endpoints
     if (route === '/auth/register' && method === 'POST') {
