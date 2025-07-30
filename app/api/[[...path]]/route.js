@@ -191,7 +191,7 @@ async function verifyToken(request) {
   
   const token = authHeader.substring(7)
   try {
-    const decoded = verify(token, JWT_SECRET)
+    const decoded = jwt.verify(token, JWT_SECRET)
     return decoded
   } catch (error) {
     return null
