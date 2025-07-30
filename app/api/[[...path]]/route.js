@@ -279,52 +279,42 @@ async function handleRoute(request, { params }) {
     }
 
     if (route === '/auth/login' && method === 'POST') {
-      let body
-      try {
-        const rawBody = await request.text()
-        console.log('Raw request body:', rawBody)
+      const body = await request.json()
+        console.log('Login attempt:', { email: body.email })
         
-        if (!rawBody || rawBody.trim() === '') {
+        const { email, password } = body
+
+        if (!email || !password) {
           return handleCORS(NextResponse.json(
-            { success: false, error: "Request body is empty" },
+            { success: false, error: "Email and password are required" },
             { status: 400 }
           ))
         }
+
+        const user = await db.collection('users').findOne({ email, password })
+        if (!user) {
+          console.log('User not found:', email)
+          return handleCORS(NextResponse.json(
+            { success: false, error: "Invalid email or password" },
+            { status: 401 }
+          ))
+        }
+
+        const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '24h' })
         
-        body = JSON.parse(rawBody)
-        console.log('Parsed body:', body)
-      } catch (jsonError) {
-        console.error('JSON parsing error:', jsonError)
+        console.log('Login successful for:', email)
+        return handleCORS(NextResponse.json({
+          success: true,
+          token,
+          user: { id: user.id, name: user.name, email: user.email }
+        }))
+      } catch (error) {
+        console.error('Login error:', error)
         return handleCORS(NextResponse.json(
-          { success: false, error: "Invalid JSON in request body" },
+          { success: false, error: "Invalid request format" },
           { status: 400 }
         ))
       }
-      
-      const { email, password } = body
-
-      if (!email || !password) {
-        return handleCORS(NextResponse.json(
-          { success: false, error: "Email and password are required" },
-          { status: 400 }
-        ))
-      }
-
-      const user = await db.collection('users').findOne({ email, password })
-      if (!user) {
-        return handleCORS(NextResponse.json(
-          { success: false, error: "Invalid email or password" },
-          { status: 401 }
-        ))
-      }
-
-      const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '24h' })
-      
-      return handleCORS(NextResponse.json({
-        success: true,
-        token,
-        user: { id: user.id, name: user.name, email: user.email }
-      }))
     }
 
     // Products endpoints
