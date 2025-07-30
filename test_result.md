@@ -119,15 +119,18 @@ backend:
 
   - task: "JWT Authentication system (register/login)"
     implemented: true
-    working: "NA"
+    working: false
     file: "/app/app/api/[[...path]]/route.js"
-    stuck_count: 0
+    stuck_count: 1
     priority: "high"
     needs_retesting: true
     status_history:
       - working: "NA"
         agent: "main"
         comment: "JWT auth endpoints created for /auth/register and /auth/login with proper token generation"
+      - working: false
+        agent: "main"
+        comment: "User reports login showing 'Something went wrong, Try again' error. API responds but test user test@example.com/password123 doesn't exist in database. Backend is working but needs test user creation or proper error handling."
 
   - task: "Products API with dynamic filtering"
     implemented: true
