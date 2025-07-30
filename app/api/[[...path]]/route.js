@@ -10,16 +10,32 @@ let db
 const JWT_SECRET = 'food-mart-secret-key-2024'
 
 async function connectToMongo() {
-  if (!client) {
-    client = new MongoClient(process.env.MONGO_URL)
-    await client.connect()
-    db = client.db(process.env.DB_NAME || 'food_mart')
+if (!client) {
+    // Use MongoDB Atlas URL if available, otherwise fall back to in-memory data
+    const mongoUrl = process.env.MONGO_URL || process.env.DATABASE_URL
     
-    // Initialize collections and sample data if they don't exist
-    await initializeDatabase()
+    if (!mongoUrl || mongoUrl.includes('localhost')) {
+      console.log('No valid MongoDB connection found, using in-memory fallback')
+      // Return a mock database object for development
+      return createMockDatabase()
+    }
+    
+    try {
+      client = new MongoClient(mongoUrl)
+      await client.connect()
+      db = client.db(process.env.DB_NAME || 'food_mart')
+      
+      // Initialize collections and sample data if they don't exist
+      await initializeDatabase()
+      console.log('Successfully connected to MongoDB')
+    } catch (error) {
+      console.error('MongoDB connection failed, falling back to in-memory data:', error)
+      return createMockDatabase()
+    }
   }
   return db
 }
+
 
 async function initializeDatabase() {
   try {
