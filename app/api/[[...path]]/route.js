@@ -252,7 +252,7 @@ async function handleRoute(request, { params }) {
 
       await db.collection('users').insertOne(user)
       
-      const token = sign({ userId, email }, JWT_SECRET, { expiresIn: '24h' })
+      const token = jwt.sign({ userId, email }, JWT_SECRET, { expiresIn: '24h' })
       
       return handleCORS(NextResponse.json({
         success: true,
