@@ -119,11 +119,11 @@ backend:
 
   - task: "JWT Authentication system (register/login)"
     implemented: true
-    working: false
+    working: true
     file: "/app/app/api/[[...path]]/route.js"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
@@ -131,6 +131,9 @@ backend:
       - working: false
         agent: "main"
         comment: "User reports login showing 'Something went wrong, Try again' error. API responds but test user test@example.com/password123 doesn't exist in database. Backend is working but needs test user creation or proper error handling."
+      - working: true
+        agent: "main"
+        comment: "Fixed login issue by correcting DB_NAME in .env from 'your_database_name' to 'food_mart' and added test user creation to database initialization. Login API now returns proper JWT token for test credentials."
 
   - task: "Products API with dynamic filtering"
     implemented: true
