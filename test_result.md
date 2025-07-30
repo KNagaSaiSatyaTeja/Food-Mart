@@ -288,3 +288,5 @@ test_plan:
 agent_communication:
   - agent: "main"
     message: "Implemented complete Food Mart e-commerce application with all core features: authentication, product listing with filters, cart management, checkout with fake payment, and order history. Backend includes MongoDB integration with sample data, JWT authentication, and all necessary API endpoints. Frontend is fully responsive with ShadCN UI components and theme switching. Ready for comprehensive backend testing."
+  - agent: "main"
+    message: "FIXED LOGIN BUG: Successfully resolved the 'Something went wrong, Try again' error by: 1) Correcting DB_NAME from 'your_database_name' to 'food_mart' in .env file, 2) Adding test user creation to database initialization. Login now works perfectly - API returns proper JWT token, frontend shows success toast 'Welcome back, Test User!', user is redirected to home page with proper navigation showing 'Hi, Test User' and logout option. User can now login with test@example.com/password123 credentials successfully."
