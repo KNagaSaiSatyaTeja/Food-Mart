@@ -209,13 +209,13 @@ async function handleRoute(request, { params }) {
   const route = `/${path.join('/')}`
   const method = request.method
   
-  console.log(`API Route called: ${method} ${route}`)
+  console.log(`API Route called: ${method} ${route}`, { params, path })
 
   try {
     const db = await connectToMongo()
 
-    // Root endpoint
-    if (route === '/' && method === 'GET') {
+    // Root endpoint - Handle both /api/ and /api
+    if ((route === '/' || route === '' || path.length === 0) && method === 'GET') {
       return handleCORS(NextResponse.json({ message: "Food Mart API is running!" }))
     }
 
