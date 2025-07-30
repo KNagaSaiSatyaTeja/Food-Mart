@@ -11,7 +11,7 @@ import os
 from datetime import datetime
 
 # Get the base URL from environment or use default
-BASE_URL = "https://6cfa56d3-eea4-4d52-827e-fa19c220b79c.preview.emergentagent.com/api"
+BASE_URL = "https://f8608310-fd30-4e83-9a13-5d6aad7831b6.preview.emergentagent.com/api"
 
 class FoodMartAPITester:
     def __init__(self):
