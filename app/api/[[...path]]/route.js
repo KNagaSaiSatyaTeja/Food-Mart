@@ -280,7 +280,7 @@ async function handleRoute(request, { params }) {
         ))
       }
 
-      const token = sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '24h' })
+      const token = jwt.sign({ userId: user.id, email }, JWT_SECRET, { expiresIn: '24h' })
       
       return handleCORS(NextResponse.json({
         success: true,
