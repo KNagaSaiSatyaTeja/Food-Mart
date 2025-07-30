@@ -271,7 +271,14 @@ const LoginPage = () => {
                   </div>
 
                   <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? 'Creating Account...' : 'Create Account'}
+                    {isLoading ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                        Creating Account...
+                      </div>
+                    ) : (
+                      'Create Account'
+                    )}
                   </Button>
                 </form>
               </CardContent>
