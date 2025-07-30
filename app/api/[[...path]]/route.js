@@ -171,6 +171,18 @@ async function initializeSampleData() {
 
   await db.collection('categories').insertMany(categories)
   await db.collection('products').insertMany(products)
+
+  // Create test user for login testing
+  const testUser = {
+    id: uuidv4(),
+    name: 'Test User',
+    email: 'test@example.com',
+    password: 'password123', // In production, hash the password
+    createdAt: new Date(),
+    orders: []
+  }
+
+  await db.collection('users').insertOne(testUser)
 }
 
 // Helper function to handle CORS
