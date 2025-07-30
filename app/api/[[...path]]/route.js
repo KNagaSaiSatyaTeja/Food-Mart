@@ -274,7 +274,28 @@ async function handleRoute(request, { params }) {
     }
 
     if (route === '/auth/login' && method === 'POST') {
-      const body = await request.json()
+      let body
+      try {
+        const rawBody = await request.text()
+        console.log('Raw request body:', rawBody)
+        
+        if (!rawBody || rawBody.trim() === '') {
+          return handleCORS(NextResponse.json(
+            { success: false, error: "Request body is empty" },
+            { status: 400 }
+          ))
+        }
+        
+        body = JSON.parse(rawBody)
+        console.log('Parsed body:', body)
+      } catch (jsonError) {
+        console.error('JSON parsing error:', jsonError)
+        return handleCORS(NextResponse.json(
+          { success: false, error: "Invalid JSON in request body" },
+          { status: 400 }
+        ))
+      }
+      
       const { email, password } = body
 
       if (!email || !password) {
